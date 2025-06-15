@@ -1,5 +1,3 @@
-// src/modelos/semestre.ts
-
 import { Curso } from './curso';
 
 export class Semestre {

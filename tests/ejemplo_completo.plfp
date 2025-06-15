@@ -1,0 +1,287 @@
+Carrera: "Ingeniería en Ciencias y Sistemas" [
+    Semestre: 01 {
+        Curso: 101 {
+            Nombre: "Matemática Básica 1";
+            Area: 03;
+            Prerrequisitos: ();
+        }
+        Curso: 017 {
+            Nombre: "Social Humanística 1";
+            Area: 05;
+            Prerrequisitos: ();
+        }
+        Curso: 006 {
+            Nombre: "Idioma Técnico 1";
+            Area: 01;
+            Prerrequisitos: ();
+        }
+        Curso: 007 {
+            Nombre: "Técnicas de Estudio e Investigación";
+            Area: 01;
+            Prerrequisitos: ();
+        }
+    }
+    Semestre: 02 {
+        Curso: 103 {
+            Nombre: "Matemática Básica 2";
+            Area: 03;
+            Prerrequisitos: (101);
+        }
+        Curso: 147 {
+            Nombre: "Física Básica";
+            Area: 04;
+            Prerrequisitos: (101);
+        }
+        Curso: 018 {
+            Nombre: "Social Humanística 2";
+            Area: 05;
+            Prerrequisitos: (017);
+        }
+        Curso: 008 {
+            Nombre: "Idioma Técnico 2";
+            Area: 01;
+            Prerrequisitos: (006);
+        }
+    }
+    Semestre: 03 {
+        Curso: 795 {
+            Nombre: "Lógica de Sistemas";
+            Area: 01;
+            Prerrequisitos: (103);
+        }
+        Curso: 960 {
+            Nombre: "Matemática de Computación 1";
+            Area: 02;
+            Prerrequisitos: (103);
+        }
+        Curso: 770 {
+            Nombre: "Introducción a la Programación y Computación 1";
+            Area: 01;
+            Prerrequisitos: (103);
+        }
+        Curso: 107 {
+            Nombre: "Matemática Intermedia 1";
+            Area: 03;
+            Prerrequisitos: (103);
+        }
+        Curso: 150 {
+            Nombre: "Física 1";
+            Area: 04;
+            Prerrequisitos: (103, 147);
+        }
+        Curso: 009 {
+            Nombre: "Idioma Técnico 3";
+            Area: 01;
+            Prerrequisitos: (008);
+        }
+    }
+    Semestre: 04 {
+        Curso: 796 {
+            Nombre: "Lenguajes Formales y de Programación";
+            Area: 01;
+            Prerrequisitos: (770, 795, 960);
+        }
+        Curso: 772 {
+            Nombre: "Introducción a la Programación y Computación 2";
+            Area: 01;
+            Prerrequisitos: (770);
+        }
+        Curso: 958 {
+            Nombre: "Práctica Inicial";
+            Area: 02;
+            Prerrequisitos: (770, 103);
+        }
+        Curso: 109 {
+            Nombre: "Matemática Intermedia 2";
+            Area: 03;
+            Prerrequisitos: (107);
+        }
+        Curso: 152 {
+            Nombre: "Física 2";
+            Area: 04;
+            Prerrequisitos: (150);
+        }
+        Curso: 010 {
+            Nombre: "Idioma Técnico 4";
+            Area: 01;
+            Prerrequisitos: (009);
+        }
+    }
+    Semestre: 05 {
+        Curso: 798 {
+            Nombre: "Organización de Lenguajes y Compiladores 1";
+            Area: 01;
+            Prerrequisitos: (796);
+        }
+        Curso: 774 {
+            Nombre: "Estructuras de Datos";
+            Area: 01;
+            Prerrequisitos: (772);
+        }
+        Curso: 777 {
+            Nombre: "Organización Computacional";
+            Area: 01;
+            Prerrequisitos: (772);
+        }
+        Curso: 962 {
+            Nombre: "Matemática de Computación 2";
+            Area: 02;
+            Prerrequisitos: (960);
+        }
+        Curso: 111 {
+            Nombre: "Matemática Intermedia 3";
+            Area: 03;
+            Prerrequisitos: (109);
+        }
+        Curso: 154 {
+            Nombre: "Física 3";
+            Area: 04;
+            Prerrequisitos: (152);
+        }
+    }
+    Semestre: 06 {
+        Curso: 281 {
+            Nombre: "Análisis y Diseño de Sistemas 1";
+            Area: 01;
+            Prerrequisitos: (774);
+        }
+        Curso: 779 {
+            Nombre: "Manejo e Implementación de Archivos";
+            Area: 01;
+            Prerrequisitos: (774);
+        }
+        Curso: 778 {
+            Nombre: "Sistemas Operativos 1";
+            Area: 01;
+            Prerrequisitos: (777);
+        }
+        Curso: 113 {
+            Nombre: "Matemática Intermedia 4";
+            Area: 03;
+            Prerrequisitos: (111);
+        }
+        Curso: 156 {
+            Nombre: "Física 4";
+            Area: 04;
+            Prerrequisitos: (154);
+        }
+        Curso: 348 {
+            Nombre: "Electrónica Analógica";
+            Area: 04;
+            Prerrequisitos: (154);
+        }
+    }
+    Semestre: 07 {
+        Curso: 283 {
+            Nombre: "Análisis y Diseño de Sistemas 2";
+            Area: 01;
+            Prerrequisitos: (281);
+        }
+        Curso: 781 {
+            Nombre: "Sistemas de Bases de Datos 1";
+            Area: 01;
+            Prerrequisitos: (779);
+        }
+        Curso: 780 {
+            Nombre: "Sistemas Operativos 2";
+            Area: 01;
+            Prerrequisitos: (778);
+        }
+        Curso: 115 {
+            Nombre: "Matemática Aplicada 1";
+            Area: 03;
+            Prerrequisitos: (113);
+        }
+        Curso: 350 {
+            Nombre: "Electrónica Digital";
+            Area: 04;
+            Prerrequisitos: (348);
+        }
+        Curso: 039 {
+            Nombre: "Filosofía de la Ciencia";
+            Area: 05;
+            Prerrequisitos: (018);
+        }
+    }
+    Semestre: 08 {
+        Curso: 285 {
+            Nombre: "Análisis y Diseño de Sistemas 3";
+            Area: 01;
+            Prerrequisitos: (283);
+        }
+        Curso: 783 {
+            Nombre: "Sistemas de Bases de Datos 2";
+            Area: 01;
+            Prerrequisitos: (781);
+        }
+        Curso: 784 {
+            Nombre: "Redes de Computadoras 1";
+            Area: 01;
+            Prerrequisitos: (780);
+        }
+        Curso: 117 {
+            Nombre: "Matemática Aplicada 2";
+            Area: 03;
+            Prerrequisitos: (115);
+        }
+        Curso: 352 {
+            Nombre: "Arquitectura de Computadoras";
+            Area: 04;
+            Prerrequisitos: (350);
+        }
+        Curso: 022 {
+            Nombre: "Ética Profesional";
+            Area: 05;
+            Prerrequisitos: (039);
+        }
+    }
+    Semestre: 09 {
+        Curso: 287 {
+            Nombre: "Práctica Intermedia";
+            Area: 02;
+            Prerrequisitos: (285);
+        }
+        Curso: 786 {
+            Nombre: "Redes de Computadoras 2";
+            Area: 01;
+            Prerrequisitos: (784);
+        }
+        Curso: 119 {
+            Nombre: "Matemática Aplicada 3";
+            Area: 03;
+            Prerrequisitos: (117);
+        }
+        Curso: 354 {
+            Nombre: "Microprocesadores";
+            Area: 04;
+            Prerrequisitos: (352);
+        }
+        Curso: 201 {
+            Nombre: "Administración de Empresas 1";
+            Area: 06;
+            Prerrequisitos: (022);
+        }
+    }
+    Semestre: 10 {
+        Curso: 289 {
+            Nombre: "Práctica Final";
+            Area: 02;
+            Prerrequisitos: (287);
+        }
+        Curso: 788 {
+            Nombre: "Inteligencia Artificial 1";
+            Area: 01;
+            Prerrequisitos: (786, 119);
+        }
+        Curso: 203 {
+            Nombre: "Administración de Empresas 2";
+            Area: 06;
+            Prerrequisitos: (201);
+        }
+        Curso: 356 {
+            Nombre: "Seminario de Tecnologías de Información";
+            Area: 04;
+            Prerrequisitos: (354);
+        }
+    }
+]

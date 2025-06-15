@@ -1,5 +1,3 @@
-// src/util/errores.ts
-
 export class ErrorSintactico {
     constructor(
         public fila: number,

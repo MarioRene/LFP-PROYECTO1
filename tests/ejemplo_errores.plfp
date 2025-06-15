@@ -1,0 +1,72 @@
+// Archivo de ejemplo con errores intencionados
+// Para probar el manejo de errores del analizador léxico y sintáctico
+
+Carrera: "Ingeniería con Errores [  // Error: falta comilla de cierre
+
+    Semestre: 01 {
+        Curso: 101 {
+            Nombre: "Curso sin cerrar;  // Error: cadena sin cerrar
+            Area: 3.5;  // Error: área debería ser entero
+            Prerrequisitos: (;  // Error: paréntesis sin cerrar
+        }
+        
+        Curso: abc {  // Error: código debería ser número
+            Nombre: "Curso Inválido";
+            Area: 07;  // Error: área inválida (máximo 6)
+            Prerrequisitos: (999);  // Error: prerrequisito inexistente
+        }
+    }
+    
+    Semestre: 02 {
+        Curso: 101 {  // Error: código duplicado
+            Nombre: "Curso Duplicado";
+            Area: 01;
+            // Error: falta Prerrequisitos
+        }
+        
+        Curso: 201 {
+            Nombre: "";  // Error: nombre vacío
+            Area: 0;     // Error: área inválida
+            Prerrequisitos: (101, 102, 103);  // Error: prerrequisito 102 no existe
+        // Error: falta llave de cierre
+        
+        Curso: 301 {
+            Nombre: "Curso Sin Área";
+            // Error: falta Area
+            Prerrequisitos: ();
+        }
+    }
+    
+    // Error: falta llave de cierre del semestre
+    
+// Error: falta corchete de cierre de carrera
+
+Carrera: Sin_comillas [  // Error: nombre sin comillas
+    // Contenido válido pero nombre inválido
+    Semestre: 01 {
+        Curso: 401 {
+            Nombre: "Curso Válido";
+            Area: 01;
+            Prerrequisitos: ();
+        }
+    }
+]
+
+// Caracteres inválidos para probar el analizador léxico
+Carrera: "Caracteres Raros" [
+    Semestre: 01 {
+        Curso: 501 {
+            Nombre: "Test @#$%^&*";  // Caracteres especiales en nombre (válido)
+            Area: 01;
+            Prerrequisitos: ();
+        }
+    }
+]
+
+// Error: símbolo desconocido
+~ | ¬ ` ´ ¿ ¡
+
+// Comentarios anidados (si se soportan)
+/* Comentario de bloque
+   /* Comentario anidado */
+   Fin de comentario */

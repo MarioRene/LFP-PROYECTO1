@@ -1,0 +1,202 @@
+Carrera: "Ingeniería en Ciencias y Sistemas" [
+    Semestre: 01 {
+        Curso: 101 {
+            Nombre: "Matemática Básica 1";
+            Area: 03;
+            Prerrequisitos: ();
+        }
+        Curso: 102 {
+            Nombre: "Introducción a la Programación 1";
+            Area: 01;
+            Prerrequisitos: ();
+        }
+        Curso: 103 {
+            Nombre: "Idioma Técnico 1";
+            Area: 01;
+            Prerrequisitos: ();
+        }
+    }
+    Semestre: 02 {
+        Curso: 201 {
+            Nombre: "Matemática Básica 2";
+            Area: 03;
+            Prerrequisitos: (101);
+        }
+        Curso: 202 {
+            Nombre: "Introducción a la Programación 2";
+            Area: 01;
+            Prerrequisitos: (102);
+        }
+        Curso: 203 {
+            Nombre: "Física Básica";
+            Area: 04;
+            Prerrequisitos: (101);
+        }
+    }
+    Semestre: 03 {
+        Curso: 301 {
+            Nombre: "Estructuras de Datos";
+            Area: 01;
+            Prerrequisitos: (202);
+        }
+        Curso: 302 {
+            Nombre: "Matemática Discreta";
+            Area: 03;
+            Prerrequisitos: (201);
+        }
+        Curso: 303 {
+            Nombre: "Lógica de Sistemas";
+            Area: 01;
+            Prerrequisitos: (202);
+        }
+    }
+    Semestre: 04 {
+        Curso: 401 {
+            Nombre: "Algoritmos y Estructuras de Datos";
+            Area: 01;
+            Prerrequisitos: (301, 302);
+        }
+        Curso: 402 {
+            Nombre: "Lenguajes Formales y de Programación";
+            Area: 01;
+            Prerrequisitos: (301, 303);
+        }
+    }
+]
+
+Carrera: "Ingeniería Industrial" [
+    Semestre: 01 {
+        Curso: 111 {
+            Nombre: "Matemática Básica 1";
+            Area: 03;
+            Prerrequisitos: ();
+        }
+        Curso: 112 {
+            Nombre: "Química General";
+            Area: 04;
+            Prerrequisitos: ();
+        }
+        Curso: 113 {
+            Nombre: "Dibujo Técnico";
+            Area: 02;
+            Prerrequisitos: ();
+        }
+    }
+    Semestre: 02 {
+        Curso: 211 {
+            Nombre: "Matemática Básica 2";
+            Area: 03;
+            Prerrequisitos: (111);
+        }
+        Curso: 212 {
+            Nombre: "Física Básica";
+            Area: 04;
+            Prerrequisitos: (111);
+        }
+        Curso: 213 {
+            Nombre: "Fundamentos de Ingeniería";
+            Area: 02;
+            Prerrequisitos: (113);
+        }
+    }
+    Semestre: 03 {
+        Curso: 311 {
+            Nombre: "Estadística Aplicada";
+            Area: 03;
+            Prerrequisitos: (211);
+        }
+        Curso: 312 {
+            Nombre: "Termodinámica";
+            Area: 04;
+            Prerrequisitos: (212);
+        }
+        Curso: 313 {
+            Nombre: "Investigación de Operaciones";
+            Area: 02;
+            Prerrequisitos: (213, 211);
+        }
+    }
+    Semestre: 04 {
+        Curso: 411 {
+            Nombre: "Control de Calidad";
+            Area: 02;
+            Prerrequisitos: (311);
+        }
+        Curso: 412 {
+            Nombre: "Diseño de Plantas Industriales";
+            Area: 02;
+            Prerrequisitos: (312, 313);
+        }
+    }
+]
+
+Carrera: "Ingeniería Civil" [
+    Semestre: 01 {
+        Curso: 121 {
+            Nombre: "Matemática Básica 1";
+            Area: 03;
+            Prerrequisitos: ();
+        }
+        Curso: 122 {
+            Nombre: "Topografía 1";
+            Area: 02;
+            Prerrequisitos: ();
+        }
+        Curso: 123 {
+            Nombre: "Dibujo de Ingeniería";
+            Area: 02;
+            Prerrequisitos: ();
+        }
+    }
+    Semestre: 02 {
+        Curso: 221 {
+            Nombre: "Matemática Básica 2";
+            Area: 03;
+            Prerrequisitos: (121);
+        }
+        Curso: 222 {
+            Nombre: "Topografía 2";
+            Area: 02;
+            Prerrequisitos: (122);
+        }
+        Curso: 223 {
+            Nombre: "Materiales de Construcción";
+            Area: 02;
+            Prerrequisitos: (123);
+        }
+    }
+    Semestre: 03 {
+        Curso: 321 {
+            Nombre: "Mecánica de Materiales";
+            Area: 04;
+            Prerrequisitos: (221);
+        }
+        Curso: 322 {
+            Nombre: "Hidráulica";
+            Area: 04;
+            Prerrequisitos: (221);
+        }
+        Curso: 323 {
+            Nombre: "Construcción 1";
+            Area: 02;
+            Prerrequisitos: (222, 223);
+        }
+    }
+    Semestre: 04 {
+        Curso: 421 {
+            Nombre: "Estructuras de Concreto";
+            Area: 02;
+            Prerrequisitos: (321);
+        }
+        Curso: 422 {
+            Nombre: "Ingeniería Sanitaria";
+            Area: 04;
+            Prerrequisitos: (322);
+        }
+        Curso: 423 {
+            Nombre: "Construcción 2";
+            Area: 02;
+            Prerrequisitos: (323);
+        }
+    }
+]

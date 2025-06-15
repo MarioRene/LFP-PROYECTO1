@@ -1,0 +1,38 @@
+Carrera: "Ciencias y Sistemas - Ejemplo Básico" [
+    Semestre: 01 {
+        Curso: 101 {
+            Nombre: "Matemática Básica 1";
+            Area: 03;
+            Prerrequisitos: ();
+        }
+        Curso: 017 {
+            Nombre: "Social Humanística 1";
+            Area: 05;
+            Prerrequisitos: ();
+        }
+    }
+    Semestre: 02 {
+        Curso: 103 {
+            Nombre: "Matemática Básica 2";
+            Area: 03;
+            Prerrequisitos: (101);
+        }
+        Curso: 147 {
+            Nombre: "Física Básica";
+            Area: 04;
+            Prerrequisitos: (101);
+        }
+    }
+    Semestre: 03 {
+        Curso: 770 {
+            Nombre: "Introducción a la Programación";
+            Area: 01;
+            Prerrequisitos: (103);
+        }
+        Curso: 795 {
+            Nombre: "Lógica de Sistemas";
+            Area: 01;
+            Prerrequisitos: (103);
+        }
+    }
+]

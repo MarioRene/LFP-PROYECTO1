@@ -2,36 +2,546 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de Errores</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Errores - USAC</title>
     <style>
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; }
-        th { background-color: #f2f2f2; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '⚠️';
+            font-size: 3em;
+            position: absolute;
+            top: 15px;
+            left: 30px;
+            opacity: 0.3;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .subtitle {
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .error-type-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            margin-right: 5px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background: #e9ecef;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85em;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+            transition: background-color 0.2s;
+        }
+        
+        .error-number {
+            font-weight: bold;
+            color: #e74c3c;
+            text-align: center;
+            width: 60px;
+        }
+        
+        .error-position {
+            font-family: 'Courier New', monospace;
+            background: #f1f3f4;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        .error-char {
+            font-family: 'Courier New', monospace;
+            background: #fff3cd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #ffeaa7;
+            font-weight: bold;
+        }
+        
+        .error-description {
+            color: #495057;
+            line-height: 1.4;
+        }
+        
+        .no-errors {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        
+        .no-errors-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+        
+        .no-errors h3 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        
+        .actions {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            margin: 0 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 4px 12px rgba(149, 165, 166, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .stats {
+                gap: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .tab {
+                padding: 10px 16px;
+                font-size: 0.9em;
+            }
+            
+            th, td {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .error-type-tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                margin-right: 0;
+                margin-bottom: 5px;
+                border-radius: 6px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Reporte de {{tipoErrores}}</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Fila</th>
-                <th>Columna</th>
-                <th>Carácter</th>
-                <th>Descripción</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each errores}}
-            <tr>
-                <td>{{@index}}</td>
-                <td>{{this.fila}}</td>
-                <td>{{this.columna}}</td>
-                <td>{{this.caracter}}</td>
-                <td>{{this.descripcion}}</td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="header">
+            <h1 id="titulo-errores">Reporte de Errores</h1>
+            <div class="subtitle" id="subtitulo-errores">Análisis completado</div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="total-errores">0</div>
+                <div class="stat-label">Total Errores</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="errores-lexicos">0</div>
+                <div class="stat-label">Léxicos</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="errores-sintacticos">0</div>
+                <div class="stat-label">Sintácticos</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="error-type-tabs">
+                <button class="tab active" onclick="cambiarTab('todos')">Todos los Errores</button>
+                <button class="tab" onclick="cambiarTab('lexicos')">Errores Léxicos</button>
+                <button class="tab" onclick="cambiarTab('sintacticos')">Errores Sintácticos</button>
+            </div>
+            
+            <div class="table-container" id="tabla-container">
+                <table id="tabla-errores">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tipo</th>
+                            <th>Posición</th>
+                            <th>Carácter/Token</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-errores">
+                        <!-- Los errores se insertarán dinámicamente aquí -->
+                    </tbody>
+                </table>
+                
+                <div class="no-errors" id="no-errores" style="display: none;">
+                    <div class="no-errors-icon">✅</div>
+                    <h3>¡Sin errores!</h3>
+                    <p>El análisis se completó exitosamente sin encontrar errores.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button class="btn" onclick="exportarErrores()">📋 Exportar Reporte</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimir</button>
+            <button class="btn btn-secondary" onclick="window.close()">❌ Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        let erroresLexicos = [];
+        let erroresSintacticos = [];
+        let tabActual = 'todos';
+        
+        // Función para inicializar los errores
+        function inicializarErrores(errores) {
+            erroresLexicos = errores.lexicos || [];
+            erroresSintacticos = errores.sintacticos || [];
+            
+            actualizarEstadisticas();
+            mostrarErrores();
+        }
+        
+        // Función para cargar errores léxicos solamente
+        function cargarErroresLexicos(errores) {
+            erroresLexicos = errores || [];
+            erroresSintacticos = [];
+            
+            document.getElementById('titulo-errores').textContent = 'Errores Léxicos';
+            document.getElementById('subtitulo-errores').textContent = 'Análisis léxico completado';
+            
+            actualizarEstadisticas();
+            mostrarErrores();
+        }
+        
+        // Función para cargar errores sintácticos solamente
+        function cargarErroresSintacticos(errores) {
+            erroresLexicos = [];
+            erroresSintacticos = errores || [];
+            
+            document.getElementById('titulo-errores').textContent = 'Errores Sintácticos';
+            document.getElementById('subtitulo-errores').textContent = 'Análisis sintáctico completado';
+            
+            actualizarEstadisticas();
+            mostrarErrores();
+        }
+        
+        // Actualizar estadísticas
+        function actualizarEstadisticas() {
+            const totalLexicos = erroresLexicos.length;
+            const totalSintacticos = erroresSintacticos.length;
+            const total = totalLexicos + totalSintacticos;
+            
+            document.getElementById('total-errores').textContent = total;
+            document.getElementById('errores-lexicos').textContent = totalLexicos;
+            document.getElementById('errores-sintacticos').textContent = totalSintacticos;
+        }
+        
+        // Cambiar tab activo
+        function cambiarTab(tipo) {
+            tabActual = tipo;
+            
+            // Actualizar tabs visuales
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            mostrarErrores();
+        }
+        
+        // Mostrar errores según el tab actual
+        function mostrarErrores() {
+            const tbody = document.getElementById('tbody-errores');
+            const noErrores = document.getElementById('no-errores');
+            const tablaContainer = document.getElementById('tabla-container');
+            
+            let erroresAMostrar = [];
+            
+            switch(tabActual) {
+                case 'lexicos':
+                    erroresAMostrar = erroresLexicos.map(e => ({...e, tipo: 'Léxico'}));
+                    break;
+                case 'sintacticos':
+                    erroresAMostrar = erroresSintacticos.map(e => ({...e, tipo: 'Sintáctico'}));
+                    break;
+                default: // 'todos'
+                    erroresAMostrar = [
+                        ...erroresLexicos.map(e => ({...e, tipo: 'Léxico'})),
+                        ...erroresSintacticos.map(e => ({...e, tipo: 'Sintáctico'}))
+                    ];
+                    // Ordenar por fila y columna
+                    erroresAMostrar.sort((a, b) => {
+                        if (a.fila !== b.fila) return a.fila - b.fila;
+                        return a.columna - b.columna;
+                    });
+            }
+            
+            if (erroresAMostrar.length === 0) {
+                tablaContainer.querySelector('table').style.display = 'none';
+                noErrores.style.display = 'block';
+            } else {
+                tablaContainer.querySelector('table').style.display = 'table';
+                noErrores.style.display = 'none';
+                
+                tbody.innerHTML = '';
+                erroresAMostrar.forEach((error, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="error-number">${index + 1}</td>
+                        <td><span class="badge ${error.tipo.toLowerCase()}">${error.tipo}</span></td>
+                        <td class="error-position">Línea ${error.fila}, Col ${error.columna}</td>
+                        <td class="error-char">${escapeHtml(error.caracter || error.encontrado || '-')}</td>
+                        <td class="error-description">${escapeHtml(error.descripcion || generarDescripcion(error))}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        }
+        
+        // Generar descripción para errores sintácticos
+        function generarDescripcion(error) {
+            if (error.esperado && error.encontrado) {
+                return `Se esperaba ${error.esperado} pero se encontró ${error.encontrado}`;
+            }
+            return error.descripcion || 'Error no especificado';
+        }
+        
+        // Exportar errores como CSV
+        function exportarErrores() {
+            let csv = 'Tipo,Fila,Columna,Caracter/Token,Descripcion\n';
+            
+            const todosErrores = [
+                ...erroresLexicos.map(e => ({...e, tipo: 'Léxico'})),
+                ...erroresSintacticos.map(e => ({...e, tipo: 'Sintáctico'}))
+            ];
+            
+            todosErrores.forEach(error => {
+                const caracter = error.caracter || error.encontrado || '-';
+                const descripcion = error.descripcion || generarDescripcion(error);
+                csv += `"${error.tipo}","${error.fila}","${error.columna}","${caracter}","${descripcion}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'reporte_errores.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Función para escapar HTML
+        function escapeHtml(unsafe) {
+            if (typeof unsafe !== 'string') return unsafe;
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // Datos de ejemplo para pruebas
+        const erroresEjemplo = {
+            lexicos: [
+                {
+                    fila: 5,
+                    columna: 10,
+                    caracter: '|',
+                    descripcion: 'Carácter desconocido'
+                },
+                {
+                    fila: 8,
+                    columna: 30,
+                    caracter: '¬',
+                    descripcion: 'Carácter desconocido'
+                }
+            ],
+            sintacticos: [
+                {
+                    fila: 12,
+                    columna: 5,
+                    esperado: 'DosPuntos',
+                    encontrado: 'PuntoComa'
+                }
+            ]
+        };
+        
+        // Inicializar con datos de ejemplo si no hay datos externos
+        document.addEventListener('DOMContentLoaded', () => {
+            // Si la página se abre sin datos, mostrar mensaje de sin errores
+            if (erroresLexicos.length === 0 && erroresSintacticos.length === 0) {
+                // Simular datos para demostración - comentar esta línea en producción
+                // inicializarErrores(erroresEjemplo);
+                
+                // En producción, mostrar sin errores
+                actualizarEstadisticas();
+                mostrarErrores();
+            }
+        });
+        
+        // Agregar estilos para badges
+        const style = document.createElement('style');
+        style.textContent = `
+            .badge {
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-size: 0.8em;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+            .badge.léxico {
+                background: #ffeaa7;
+                color: #d63031;
+            }
+            .badge.sintáctico {
+                background: #fab1a0;
+                color: #e17055;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>

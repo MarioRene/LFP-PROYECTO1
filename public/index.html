@@ -1,5 +1,3 @@
-<!-- public/index.html -->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,51 +6,311 @@
     <title>Editor de Pensum - USAC</title>
     <link rel="stylesheet" href="/css/styles.css">
     <style>
-        .token-palabra-reservada { color: blue; font-weight: bold; }
-        .token-cadena { color: orange; }
-        .token-numero { color: purple; }
-        .token-simbolo { color: black; }
-        .token-error { background-color: #ffcccc; }
+        /* Mejoras adicionales de interfaz */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand::before {
+            content: '🎓';
+            font-size: 1.5em;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .editor-container {
+            padding: 20px;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .editor-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .editor-stats {
+            font-size: 0.9em;
+            color: #6c757d;
+            display: flex;
+            gap: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-item::before {
+            content: '📄';
+        }
+
+        .editor-container #editor {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .editor-container #editor:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            outline: none;
+        }
+
+        .resultados-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tabla-tokens {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .tabla-tokens h3 {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            margin: 0;
+            padding: 15px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tabla-tokens h3::before {
+            content: '🔍';
+        }
+
+        .tabla-tokens table {
+            background: white;
+        }
+
+        .tabla-tokens th {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.85em;
+        }
+
+        .tabla-tokens tr:hover {
+            background-color: #e3f2fd;
+            transform: scale(1.01);
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '⚡';
+            margin-right: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .token-palabra-reservada { 
+            color: #2563eb; 
+            font-weight: bold; 
+            background: rgba(37, 99, 235, 0.1);
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+        
+        .token-cadena { 
+            color: #ea580c; 
+            background: rgba(234, 88, 12, 0.1);
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+        
+        .token-numero { 
+            color: #9333ea; 
+            background: rgba(147, 51, 234, 0.1);
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+        
+        .token-simbolo { 
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        .token-error { 
+            background-color: #fecaca; 
+            color: #dc2626;
+            padding: 1px 3px;
+            border-radius: 3px;
+            border: 1px solid #f87171;
+        }
+
+        .modal-content {
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .loading {
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: #28a745;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: #dc3545;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                margin: 10px;
+            }
+
+            .editor-stats {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .editor-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="navbar-brand">Editor de Pensum</div>
         <ul class="navbar-nav">
-            <li><a href="#" id="home">Home</a></li>
-            <li><a href="#" id="error-report">Error Report</a></li>
+            <li><a href="#" id="home">🏠 Home</a></li>
+            <li><a href="#" id="error-report">📊 Error Report</a></li>
             <li class="dropdown">
-                <a href="#">Archivo</a>
+                <a href="#">📁 Archivo</a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" id="limpiar-editor">Limpiar Editor</a></li>
-                    <li><a href="#" id="cargar-archivo">Cargar Archivo</a></li>
-                    <li><a href="#" id="guardar-archivo">Guardar Archivo</a></li>
+                    <li><a href="#" id="limpiar-editor">🗑️ Limpiar Editor</a></li>
+                    <li><a href="#" id="cargar-archivo">📂 Cargar Archivo</a></li>
+                    <li><a href="#" id="guardar-archivo">💾 Guardar Archivo</a></li>
                 </ul>
             </li>
+            <li><a href="#" id="ayuda">❓ Ayuda</a></li>
         </ul>
     </nav>
 
     <div class="container">
         <div class="editor-container">
-            <div id="editor" contenteditable="true" class="editor-textarea" spellcheck="false"></div>
+            <div class="editor-header">
+                <h3 class="editor-title">Editor de Texto</h3>
+                <div class="editor-stats">
+                    <div class="stat-item" id="lineas-count">Líneas: 0</div>
+                    <div class="stat-item" id="chars-count">Caracteres: 0</div>
+                </div>
+            </div>
+            <div id="editor" contenteditable="true" class="editor-textarea" spellcheck="false" 
+                 placeholder="Escriba aquí el código del pensum o cargue un archivo .plfp..."></div>
             <button id="analizar-btn" class="btn-primary">Analizar</button>
         </div>
 
         <div class="resultados-container">
             <div class="tabla-tokens">
                 <h3>Tabla de Tokens</h3>
-                <table id="tabla-tokens">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Fila</th>
-                            <th>Columna</th>
-                            <th>Lexema</th>
-                            <th>Token</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table id="tabla-tokens">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Fila</th>
+                                <th>Columna</th>
+                                <th>Lexema</th>
+                                <th>Token</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -67,5 +325,123 @@
     <input type="file" id="file-input" style="display: none;" accept=".plfp">
     
     <script src="/js/editor.js"></script>
+    
+    <script>
+        // Funcionalidad adicional para la interfaz mejorada
+        document.addEventListener('DOMContentLoaded', () => {
+            const editor = document.getElementById('editor');
+            const lineasCount = document.getElementById('lineas-count');
+            const charsCount = document.getElementById('chars-count');
+            const ayudaBtn = document.getElementById('ayuda');
+
+            // Actualizar estadísticas en tiempo real
+            function actualizarEstadisticas() {
+                const texto = editor.innerText;
+                const lineas = texto.split('\n').length;
+                const caracteres = texto.length;
+                
+                lineasCount.textContent = `Líneas: ${lineas}`;
+                charsCount.textContent = `Caracteres: ${caracteres}`;
+            }
+
+            editor.addEventListener('input', actualizarEstadisticas);
+            
+            // Placeholder functionality
+            editor.addEventListener('focus', () => {
+                if (editor.innerText.trim() === '') {
+                    editor.setAttribute('data-placeholder', 'true');
+                }
+            });
+
+            editor.addEventListener('blur', () => {
+                editor.removeAttribute('data-placeholder');
+            });
+
+            // Ayuda
+            ayudaBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                mostrarAyuda();
+            });
+
+            function mostrarAyuda() {
+                const ayudaHTML = `
+                    <h2>📖 Ayuda - Editor de Pensum</h2>
+                    <div style="text-align: left; line-height: 1.6;">
+                        <h3>🔧 Sintaxis del Lenguaje:</h3>
+                        <pre style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 0.9em;">
+Carrera: "Nombre de la Carrera" [
+    Semestre: 01 {
+        Curso: 101 {
+            Nombre: "Nombre del Curso";
+            Area: 01;
+            Prerrequisitos: ();
+        }
+    }
+]</pre>
+                        
+                        <h3>🎨 Resaltado de Sintaxis:</h3>
+                        <ul>
+                            <li><span style="color: #2563eb; font-weight: bold;">Azul:</span> Palabras reservadas (Carrera, Semestre, Curso, etc.)</li>
+                            <li><span style="color: #ea580c;">Naranja:</span> Cadenas de texto</li>
+                            <li><span style="color: #9333ea;">Morado:</span> Números</li>
+                            <li><span style="color: #374151;">Negro:</span> Símbolos</li>
+                        </ul>
+
+                        <h3>⚡ Atajos de Teclado:</h3>
+                        <ul>
+                            <li><strong>Ctrl + S:</strong> Guardar archivo</li>
+                            <li><strong>Ctrl + O:</strong> Abrir archivo</li>
+                            <li><strong>Ctrl + Enter:</strong> Analizar código</li>
+                        </ul>
+
+                        <h3>📁 Archivos de Ejemplo:</h3>
+                        <p>Use los archivos ejemplo_simple.plfp o ejemplo_completo.plfp para probar el editor.</p>
+                    </div>
+                `;
+                
+                const modal = document.getElementById('modal');
+                const modalBody = document.getElementById('modal-body');
+                modalBody.innerHTML = ayudaHTML;
+                modal.style.display = 'block';
+            }
+
+            // Atajos de teclado
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey) {
+                    switch(e.key) {
+                        case 's':
+                            e.preventDefault();
+                            document.getElementById('guardar-archivo').click();
+                            break;
+                        case 'o':
+                            e.preventDefault();
+                            document.getElementById('cargar-archivo').click();
+                            break;
+                        case 'Enter':
+                            e.preventDefault();
+                            document.getElementById('analizar-btn').click();
+                            break;
+                    }
+                }
+            });
+
+            // Inicializar estadísticas
+            actualizarEstadisticas();
+        });
+
+        // Función para mostrar notificaciones
+        function mostrarNotificacion(mensaje, tipo = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${tipo}`;
+            notification.textContent = mensaje;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

@@ -1,5 +1,3 @@
-// src/modelos/curso.ts
-
 export class Curso {
     constructor(
         public codigo: number,

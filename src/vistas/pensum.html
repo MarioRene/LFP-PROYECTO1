@@ -2,32 +2,361 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pensum Interactivo - {{nombreCarrera}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pensum Interactivo - USAC</title>
     <style>
-        /* Estilos iguales a los de generarHTMLPensum() */
-        body { font-family: Arial, sans-serif; }
-        .semestre { background: white; margin-bottom: 20px; padding: 15px; }
-        .curso { cursor: pointer; padding: 10px; margin: 5px; background: #f1f1f1; }
-        .curso-seleccionado { background: #3498db; color: white; }
-        .prerrequisito { background: #e67e22; color: white; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .info-carrera {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .semestre {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .semestre h2 {
+            color: #3498db;
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .cursos-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .curso {
+            background-color: #f1f1f1;
+            border-radius: 6px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: calc(33% - 15px);
+            box-sizing: border-box;
+            min-width: 200px;
+        }
+        
+        .curso:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        .curso h3 {
+            margin: 0 0 5px 0;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .curso p {
+            margin: 5px 0;
+            color: #7f8c8d;
+            font-size: 12px;
+        }
+        
+        .curso-seleccionado {
+            background-color: #3498db !important;
+            color: white !important;
+        }
+        
+        .curso-seleccionado h3, 
+        .curso-seleccionado p {
+            color: white !important;
+        }
+        
+        .prerrequisito {
+            background-color: #e67e22 !important;
+            color: white !important;
+        }
+        
+        .prerrequisito h3, 
+        .prerrequisito p {
+            color: white !important;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .curso {
+                width: calc(50% - 15px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .curso {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="info-carrera">
-        <h1>Pensum de la carrera: {{nombreCarrera}}</h1>
-        <p>Total de semestres: {{totalSemestres}}</p>
-        <p>Total de cursos: {{totalCursos}}</p>
+        <h1 id="titulo-carrera">Pensum Interactivo</h1>
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="total-semestres">0</div>
+                <div class="stat-label">Semestres</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="total-cursos">0</div>
+                <div class="stat-label">Cursos</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="total-areas">0</div>
+                <div class="stat-label">Áreas</div>
+            </div>
+        </div>
     </div>
     
-    <!-- Los semestres y cursos se insertarán dinámicamente aquí -->
     <div id="contenido-pensum">
-        {{{contenidoSemestres}}}
+        <!-- Los semestres y cursos se insertarán dinámicamente aquí -->
     </div>
 
     <script>
-        // Mapa de cursos y lógica de selección (igual que en generarHTMLPensum())
-        const cursosMap = {{{cursosMap}}};
-        function seleccionarCurso(codigo) { /* ... */ }
+        // Mapa de cursos por código
+        let cursosMap = {};
+        let datosCarrera = null;
+        
+        // Función para inicializar el pensum con datos
+        function inicializarPensum(datos) {
+            datosCarrera = datos;
+            cursosMap = {};
+            
+            // Crear mapa de cursos
+            datos.semestres.forEach(semestre => {
+                semestre.cursos.forEach(curso => {
+                    cursosMap[curso.codigo] = curso;
+                });
+            });
+            
+            // Actualizar título y estadísticas
+            document.getElementById('titulo-carrera').textContent = 
+                `Pensum de la carrera: ${datos.nombre}`;
+            document.getElementById('total-semestres').textContent = datos.semestres.length;
+            document.getElementById('total-cursos').textContent = 
+                datos.semestres.reduce((total, sem) => total + sem.cursos.length, 0);
+            
+            // Calcular total de áreas únicas
+            const areas = new Set();
+            datos.semestres.forEach(semestre => {
+                semestre.cursos.forEach(curso => areas.add(curso.area));
+            });
+            document.getElementById('total-areas').textContent = areas.size;
+            
+            // Generar contenido HTML
+            generarHTMLSemestres();
+        }
+        
+        // Función para generar HTML de semestres
+        function generarHTMLSemestres() {
+            const contenedor = document.getElementById('contenido-pensum');
+            contenedor.innerHTML = '';
+            
+            // Ordenar semestres por número
+            datosCarrera.semestres.sort((a, b) => a.numero - b.numero);
+            
+            datosCarrera.semestres.forEach(semestre => {
+                const semestreDiv = document.createElement('div');
+                semestreDiv.className = 'semestre';
+                
+                const titulo = document.createElement('h2');
+                titulo.textContent = `Semestre ${semestre.numero}`;
+                semestreDiv.appendChild(titulo);
+                
+                const cursosContainer = document.createElement('div');
+                cursosContainer.className = 'cursos-container';
+                
+                semestre.cursos.forEach(curso => {
+                    const cursoDiv = document.createElement('div');
+                    cursoDiv.className = 'curso';
+                    cursoDiv.setAttribute('data-codigo', curso.codigo);
+                    cursoDiv.onclick = () => seleccionarCurso(curso.codigo);
+                    
+                    const titulo = document.createElement('h3');
+                    titulo.textContent = `${curso.codigo} - ${curso.nombre}`;
+                    cursoDiv.appendChild(titulo);
+                    
+                    const area = document.createElement('p');
+                    area.textContent = `Área: ${curso.area}`;
+                    cursoDiv.appendChild(area);
+                    
+                    const prerrequisitos = document.createElement('p');
+                    if (curso.prerrequisitos && curso.prerrequisitos.length > 0) {
+                        const prereqTexto = curso.prerrequisitos.map(cod => {
+                            const c = cursosMap[cod];
+                            return c ? `${cod} (${c.nombre})` : `${cod}`;
+                        }).join(', ');
+                        prerrequisitos.textContent = `Prerrequisitos: ${prereqTexto}`;
+                    } else {
+                        prerrequisitos.textContent = 'Prerrequisitos: Ninguno';
+                    }
+                    cursoDiv.appendChild(prerrequisitos);
+                    
+                    cursosContainer.appendChild(cursoDiv);
+                });
+                
+                semestreDiv.appendChild(cursosContainer);
+                contenedor.appendChild(semestreDiv);
+            });
+        }
+        
+        // Función para resaltar curso y prerrequisitos
+        function seleccionarCurso(codigo) {
+            // Limpiar selecciones anteriores
+            document.querySelectorAll('.curso-seleccionado, .prerrequisito').forEach(el => {
+                el.classList.remove('curso-seleccionado', 'prerrequisito');
+            });
+            
+            // Resaltar curso seleccionado
+            const cursoElement = document.querySelector(`.curso[data-codigo="${codigo}"]`);
+            if (cursoElement) {
+                cursoElement.classList.add('curso-seleccionado');
+                
+                // Resaltar prerrequisitos recursivamente
+                resaltarPrerrequisitos(codigo);
+            }
+        }
+        
+        // Función recursiva para resaltar prerrequisitos
+        function resaltarPrerrequisitos(codigo) {
+            const curso = cursosMap[codigo];
+            if (curso && curso.prerrequisitos && curso.prerrequisitos.length > 0) {
+                curso.prerrequisitos.forEach(prerreqCodigo => {
+                    const prerreqElement = document.querySelector(`.curso[data-codigo="${prerreqCodigo}"]`);
+                    if (prerreqElement && !prerreqElement.classList.contains('curso-seleccionado')) {
+                        prerreqElement.classList.add('prerrequisito');
+                        resaltarPrerrequisitos(prerreqCodigo);
+                    }
+                });
+            }
+        }
+        
+        // Función para escaper HTML y prevenir XSS
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // Datos de ejemplo (para pruebas independientes)
+        const datosEjemplo = {
+            nombre: "Ingeniería en Ciencias y Sistemas",
+            semestres: [
+                {
+                    numero: 1,
+                    cursos: [
+                        {
+                            codigo: 101,
+                            nombre: "Mate Basica 1",
+                            area: 1,
+                            prerrequisitos: []
+                        },
+                        {
+                            codigo: 102,
+                            nombre: "Intr. A la Prog. Y Computación 1",
+                            area: 2,
+                            prerrequisitos: []
+                        }
+                    ]
+                },
+                {
+                    numero: 2,
+                    cursos: [
+                        {
+                            codigo: 201,
+                            nombre: "Mate Basica 2",
+                            area: 1,
+                            prerrequisitos: [101]
+                        },
+                        {
+                            codigo: 202,
+                            nombre: "Intr. A la Prog. Y Computación 2",
+                            area: 2,
+                            prerrequisitos: [102]
+                        }
+                    ]
+                },
+                {
+                    numero: 3,
+                    cursos: [
+                        {
+                            codigo: 301,
+                            nombre: "Mate Computo 1",
+                            area: 1,
+                            prerrequisitos: [201]
+                        },
+                        {
+                            codigo: 302,
+                            nombre: "Lógica de Sistemas",
+                            area: 2,
+                            prerrequisitos: [202]
+                        }
+                    ]
+                },
+                {
+                    numero: 4,
+                    cursos: [
+                        {
+                            codigo: 401,
+                            nombre: "Lenguajes Formales y de Prog",
+                            area: 2,
+                            prerrequisitos: [301, 302, 202]
+                        }
+                    ]
+                }
+            ]
+        };
+        
+        // Inicializar con datos de ejemplo si no hay datos externos
+        document.addEventListener('DOMContentLoaded', () => {
+            // Si no se han proporcionado datos externos, usar los de ejemplo
+            if (!datosCarrera) {
+                inicializarPensum(datosEjemplo);
+            }
+        });
     </script>
 </body>
 </html>

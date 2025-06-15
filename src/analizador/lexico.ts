@@ -1,5 +1,3 @@
-// src/analizador/lexico.ts
-
 type Token = {
     tipo: string;
     valor: string;
@@ -44,6 +42,8 @@ class AnalizadorLexico {
             
             if (this.esEspacio(caracterActual)) {
                 this.manejarEspacios();
+            } else if (caracterActual === '/' && this.posicion + 1 < this.entrada.length && this.entrada[this.posicion + 1] === '/') {
+                this.manejarComentarios();
             } else if (this.esDigito(caracterActual)) {
                 this.manejarNumeros();
             } else if (this.esLetra(caracterActual)) {
@@ -53,6 +53,8 @@ class AnalizadorLexico {
             } else if (this.esSimbolo(caracterActual)) {
                 this.manejarSimbolos();
             } else {
+                // Agregar token de error en lugar de solo registrar error
+                this.agregarToken('Error', caracterActual, this.posicion);
                 this.agregarError('Carácter desconocido');
                 this.posicion++;
                 this.columna++;
@@ -62,9 +64,17 @@ class AnalizadorLexico {
         return { tokens: this.tokens, errores: this.errores };
     }
 
+    private manejarComentarios(): void {
+        // Comentarios de línea //
+        while (this.posicion < this.entrada.length && this.entrada[this.posicion] !== '\n') {
+            this.posicion++;
+            this.columna++;
+        }
+    }
+
     private manejarEspacios(): void {
-        let caracter = this.entrada[this.posicion];
-        while (this.posicion < this.entrada.length && this.esEspacio(caracter)) {
+        while (this.posicion < this.entrada.length && this.esEspacio(this.entrada[this.posicion])) {
+            const caracter = this.entrada[this.posicion];
             if (caracter === '\n') {
                 this.fila++;
                 this.columna = 1;
@@ -72,71 +82,94 @@ class AnalizadorLexico {
                 this.columna++;
             }
             this.posicion++;
-            caracter = this.entrada[this.posicion];
         }
     }
 
     private manejarNumeros(): void {
-        const inicio = this.posicion;
+        const inicioColumna = this.columna;
         let valor = '';
-        let caracter = this.entrada[this.posicion];
         
-        while (this.posicion < this.entrada.length && this.esDigito(caracter)) {
-            valor += caracter;
+        while (this.posicion < this.entrada.length && this.esDigito(this.entrada[this.posicion])) {
+            valor += this.entrada[this.posicion];
             this.posicion++;
             this.columna++;
-            caracter = this.posicion < this.entrada.length ? this.entrada[this.posicion] : '';
         }
         
-        this.agregarToken('Numero', valor, inicio);
+        this.tokens.push({
+            tipo: 'Numero',
+            valor,
+            fila: this.fila,
+            columna: inicioColumna
+        });
     }
 
     private manejarPalabras(): void {
-        const inicio = this.posicion;
+        const inicioColumna = this.columna;
         let valor = '';
-        let caracter = this.entrada[this.posicion];
         
-        while (this.posicion < this.entrada.length && (this.esLetra(caracter) || this.esDigito(caracter))) {
-            valor += caracter;
+        while (this.posicion < this.entrada.length && 
+               (this.esLetra(this.entrada[this.posicion]) || this.esDigito(this.entrada[this.posicion]))) {
+            valor += this.entrada[this.posicion];
             this.posicion++;
             this.columna++;
-            caracter = this.posicion < this.entrada.length ? this.entrada[this.posicion] : '';
         }
         
-        // Verificar si es palabra reservada
-        const palabrasReservadas = ['Carrera', 'Semestre', 'Nombre', 'Area', 'Prerrequisitos'];
+        // Verificar si es palabra reservada - INCLUIR 'Curso'
+        const palabrasReservadas = ['Carrera', 'Semestre', 'Curso', 'Nombre', 'Area', 'Prerrequisitos'];
         const tipo = palabrasReservadas.includes(valor) ? 'PalabraReservada' : 'Identificador';
         
-        this.agregarToken(tipo, valor, inicio);
+        this.tokens.push({
+            tipo,
+            valor,
+            fila: this.fila,
+            columna: inicioColumna
+        });
     }
 
     private manejarCadenas(): void {
-        const inicio = this.posicion;
+        const inicioColumna = this.columna;
         let valor = '"';
         this.posicion++;
         this.columna++;
-        let caracter = this.entrada[this.posicion];
-        let escape = false;
         
-        while (this.posicion < this.entrada.length && (caracter !== '"' || escape)) {
-            if (caracter === '\\' && !escape) {
-                escape = true;
+        while (this.posicion < this.entrada.length && this.entrada[this.posicion] !== '"') {
+            const caracter = this.entrada[this.posicion];
+            valor += caracter;
+            
+            if (caracter === '\n') {
+                this.fila++;
+                this.columna = 1;
             } else {
-                valor += caracter;
-                escape = false;
+                this.columna++;
             }
             this.posicion++;
-            this.columna++;
-            caracter = this.posicion < this.entrada.length ? this.entrada[this.posicion] : '';
         }
         
-        if (caracter === '"') {
+        if (this.posicion < this.entrada.length && this.entrada[this.posicion] === '"') {
             valor += '"';
             this.posicion++;
             this.columna++;
-            this.agregarToken('Cadena', valor, inicio);
+            
+            this.tokens.push({
+                tipo: 'Cadena',
+                valor,
+                fila: this.fila,
+                columna: inicioColumna
+            });
         } else {
-            this.agregarError('Cadena no cerrada');
+            // Cadena no cerrada - agregar como error
+            this.tokens.push({
+                tipo: 'Error',
+                valor,
+                fila: this.fila,
+                columna: inicioColumna
+            });
+            this.errores.push({
+                fila: this.fila,
+                columna: inicioColumna,
+                caracter: '"',
+                descripcion: 'Cadena no cerrada'
+            });
         }
     }
 
@@ -144,7 +177,7 @@ class AnalizadorLexico {
         const caracter = this.entrada[this.posicion];
         let tipo = 'Simbolo';
         
-        // Mapear símbolos a tipos específicos si es necesario
+        // Mapear símbolos a tipos específicos
         const simbolosEspeciales: Record<string, string> = {
             ':': 'DosPuntos',
             '[': 'CorcheteApertura',
@@ -158,7 +191,14 @@ class AnalizadorLexico {
         };
         
         tipo = simbolosEspeciales[caracter] || tipo;
-        this.agregarToken(tipo, caracter, this.posicion);
+        
+        this.tokens.push({
+            tipo,
+            valor: caracter,
+            fila: this.fila,
+            columna: this.columna
+        });
+        
         this.posicion++;
         this.columna++;
     }
@@ -183,7 +223,7 @@ class AnalizadorLexico {
     }
 
     private esEspacio(caracter: string): boolean {
-        return caracter === ' ' || caracter === '\t' || caracter === '\n' || caracter === '\r';
+        return /\s/.test(caracter);
     }
 
     private esDigito(caracter: string): boolean {
@@ -191,7 +231,9 @@ class AnalizadorLexico {
     }
 
     private esLetra(caracter: string): boolean {
-        return (caracter >= 'a' && caracter <= 'z') || (caracter >= 'A' && caracter <= 'Z') || caracter === '_';
+        return (caracter >= 'a' && caracter <= 'z') || 
+               (caracter >= 'A' && caracter <= 'Z') || 
+               caracter === '_';
     }
 
     private esSimbolo(caracter: string): boolean {
