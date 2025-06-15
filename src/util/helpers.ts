@@ -1,4 +1,7 @@
-import { Carrera, Curso } from '../modelos';
+// src/util/helpers.ts
+
+import { Carrera } from '../modelos/carrera';
+import { Curso } from '../modelos/curso';
 
 export function generarHTMLPensum(carrera: Carrera): string {
     // Ordenar semestres por número
@@ -165,12 +168,12 @@ export function generarHTMLPensum(carrera: Carrera): string {
 function generarHTMLCurso(curso: Curso, carrera: Carrera): string {
     return `
         <div class="curso" data-codigo="${curso.codigo}" onclick="seleccionarCurso(${curso.codigo})">
-            <h3>${curso.codigo} - ${curso.nombre}</h3>
+            <h3>${curso.codigo} - ${escapeHtml(curso.nombre)}</h3>
             <p>Área: ${curso.area}</p>
             <p>Prerrequisitos: ${curso.prerrequisitos.length > 0 ? 
                 curso.prerrequisitos.map(cod => {
                     const c = carrera.obtenerCursoPorCodigo(cod);
-                    return c ? `${cod} (${c.nombre})` : `${cod}`;
+                    return c ? `${cod} (${escapeHtml(c.nombre)})` : `${cod}`;
                 }).join(', ') : 'Ninguno'}
             </p>
         </div>
@@ -209,8 +212,8 @@ export function generarHTMLErrores(errores: any[]): string {
                             <td>${index + 1}</td>
                             <td>${error.fila}</td>
                             <td>${error.columna}</td>
-                            <td>${error.caracter || ' '}</td>
-                            <td>${error.descripcion}</td>
+                            <td>${escapeHtml(error.caracter || ' ')}</td>
+                            <td>${escapeHtml(error.descripcion)}</td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -218,4 +221,54 @@ export function generarHTMLErrores(errores: any[]): string {
         </body>
         </html>
     `;
+}
+
+export function generarHTMLErroresSintacticos(errores: any[]): string {
+    return `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <title>Errores Sintácticos</title>
+            <style>
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                tr:nth-child(even) { background-color: #f9f9f9; }
+            </style>
+        </head>
+        <body>
+            <h1>Errores Sintácticos</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Fila</th>
+                        <th>Columna</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${errores.map((error, index) => `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${error.fila}</td>
+                            <td>${error.columna}</td>
+                            <td>Se esperaba ${escapeHtml(error.esperado)} pero se encontró ${escapeHtml(error.encontrado)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </body>
+        </html>
+    `;
+}
+
+function escapeHtml(unsafe: string): string {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }

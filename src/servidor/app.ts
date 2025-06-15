@@ -2,6 +2,7 @@
 
 import express from 'express';
 import path from 'path';
+import rutas from './rutas';
 import AnalizadorLexico from '../analizador/lexico';
 import AnalizadorSintactico from '../analizador/sintactico';
 import { Carrera } from '../modelos/carrera';
@@ -11,6 +12,7 @@ const app = express();
 const PORT = 3000;
 
 // Middleware para parsear JSON y form data
+app.use('/', rutas);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

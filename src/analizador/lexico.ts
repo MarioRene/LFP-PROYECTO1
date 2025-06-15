@@ -104,7 +104,7 @@ class AnalizadorLexico {
         }
         
         // Verificar si es palabra reservada
-        const palabrasReservadas = ['Carrera', 'Nombre', 'Area', 'Prerrequisitos'];
+        const palabrasReservadas = ['Carrera', 'Semestre', 'Nombre', 'Area', 'Prerrequisitos'];
         const tipo = palabrasReservadas.includes(valor) ? 'PalabraReservada' : 'Identificador';
         
         this.agregarToken(tipo, valor, inicio);

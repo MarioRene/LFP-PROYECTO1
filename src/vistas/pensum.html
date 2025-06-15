@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pensum Interactivo - {{nombreCarrera}}</title>
+    <style>
+        /* Estilos iguales a los de generarHTMLPensum() */
+        body { font-family: Arial, sans-serif; }
+        .semestre { background: white; margin-bottom: 20px; padding: 15px; }
+        .curso { cursor: pointer; padding: 10px; margin: 5px; background: #f1f1f1; }
+        .curso-seleccionado { background: #3498db; color: white; }
+        .prerrequisito { background: #e67e22; color: white; }
+    </style>
+</head>
+<body>
+    <div class="info-carrera">
+        <h1>Pensum de la carrera: {{nombreCarrera}}</h1>
+        <p>Total de semestres: {{totalSemestres}}</p>
+        <p>Total de cursos: {{totalCursos}}</p>
+    </div>
+    
+    <!-- Los semestres y cursos se insertarán dinámicamente aquí -->
+    <div id="contenido-pensum">
+        {{{contenidoSemestres}}}
+    </div>
+
+    <script>
+        // Mapa de cursos y lógica de selección (igual que en generarHTMLPensum())
+        const cursosMap = {{{cursosMap}}};
+        function seleccionarCurso(codigo) { /* ... */ }
+    </script>
+</body>
+</html>

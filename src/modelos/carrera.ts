@@ -1,4 +1,7 @@
+// src/modelos/carrera.ts
+
 import { Semestre } from './semestre';
+import { Curso } from './curso';
 
 export class Carrera {
     constructor(

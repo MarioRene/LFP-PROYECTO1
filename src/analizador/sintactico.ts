@@ -1,7 +1,9 @@
 // src/analizador/sintactico.ts
 
 import AnalizadorLexico from './lexico';
-import { Carrera, Semestre, Curso } from '../modelos';
+import { Carrera } from '../modelos/carrera';
+import { Semestre } from '../modelos/semestre';
+import { Curso } from '../modelos/curso';
 
 class AnalizadorSintactico {
     private tokens: any[];

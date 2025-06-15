@@ -1,0 +1,5 @@
+// src/modelos/index.ts
+
+export { Carrera } from './carrera';
+export { Semestre } from './semestre';
+export { Curso } from './curso';
