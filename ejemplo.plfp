@@ -1,0 +1,43 @@
+Carrera: "Ingeniería en Ciencias y Sistemas" [
+    Semestre: 1 {
+        101 {
+            Nombre: "Mate Basica 1";
+            Area: 1;
+        }
+        102 {
+            Nombre: "Intr. A la Prog. Y Computación 1";
+            Area: 2;
+        }
+    }
+    Semestre: 2 {
+        201 {
+            Nombre: "Mate Basica 2";
+            Area: 1;
+            Prerrequisitos: (101)
+        }
+        202 {
+            Nombre: "Intr. A la Prog. Y Computación 2";
+            Area: 2;
+            Prerrequisitos: (102)
+        }
+    }
+    Semestre: 3 {
+        301 {
+            Nombre: "Mate Computo 1";
+            Area: 1;
+            Prerrequisitos: (201)
+        }
+        302 {
+            Nombre: "Lógica de Sistemas";
+            Area: 2;
+            Prerrequisitos: (202)
+        }
+    }
+    Semestre: 4 {
+        401 {
+            Nombre: "Lenguajes Formales y de Prog";
+            Area: 2;
+            Prerrequisitos: (301, 302, 202)
+        }
+    }
+]

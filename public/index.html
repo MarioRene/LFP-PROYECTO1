@@ -1,0 +1,71 @@
+<!-- public/index.html -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Pensum - USAC</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .token-palabra-reservada { color: blue; font-weight: bold; }
+        .token-cadena { color: orange; }
+        .token-numero { color: purple; }
+        .token-simbolo { color: black; }
+        .token-error { background-color: #ffcccc; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Editor de Pensum</div>
+        <ul class="navbar-nav">
+            <li><a href="#" id="home">Home</a></li>
+            <li><a href="#" id="error-report">Error Report</a></li>
+            <li class="dropdown">
+                <a href="#">Archivo</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" id="limpiar-editor">Limpiar Editor</a></li>
+                    <li><a href="#" id="cargar-archivo">Cargar Archivo</a></li>
+                    <li><a href="#" id="guardar-archivo">Guardar Archivo</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="editor-container">
+            <div id="editor" contenteditable="true" class="editor-textarea" spellcheck="false"></div>
+            <button id="analizar-btn" class="btn-primary">Analizar</button>
+        </div>
+
+        <div class="resultados-container">
+            <div class="tabla-tokens">
+                <h3>Tabla de Tokens</h3>
+                <table id="tabla-tokens">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Fila</th>
+                            <th>Columna</th>
+                            <th>Lexema</th>
+                            <th>Token</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <input type="file" id="file-input" style="display: none;" accept=".plfp">
+    
+    <script src="/js/editor.js"></script>
+</body>
+</html>

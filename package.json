@@ -1,0 +1,24 @@
+{
+  "name": "proyecto-pensum",
+  "version": "1.0.0",
+  "description": "Analizador léxico para pensum interactivo USAC",
+  "main": "dist/servidor/app.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/servidor/app.js",
+    "dev": "ts-node src/servidor/app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.23",
+    "@types/node": "^20.19.0",
+    "ts-node": "^10.9.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
